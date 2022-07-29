@@ -4,15 +4,15 @@ class Snake:
     def __init__(self, width, height):
         self.length = 2
         self.border = [width, height]
-        self.last_position_tail = [[16,32]]
+        self.last_position_tail = [[32, 64]]
         self.body = [
                         {
                             'type': "TAIL", 
-                            'position': [16,32]
+                            'position': [32, 64]
                         }, 
                         {
                             'type': "HEAD", 
-                            'position': [32,32]
+                            'position': [64, 64]
                         }
                     ]
 
@@ -20,16 +20,16 @@ class Snake:
     def draw(self, screen):
         for part in self.body:
             if part['type'] == "HEAD":
-                pygame.draw.rect(screen, "Red", pygame.Rect(part['position'][0], part['position'][1],16,16), 2) # x, y, width, heithg
+                pygame.draw.rect(screen, "Red", pygame.Rect(part['position'][0], part['position'][1],32,32), 2) # x, y, width, heithg
             elif part['type'] == "BODY":
-                pygame.draw.rect(screen, "Orange", pygame.Rect(part['position'][0], part['position'][1],16,16), 2)
+                pygame.draw.rect(screen, "Orange", pygame.Rect(part['position'][0], part['position'][1],32,32), 2)
             elif part['type'] == "TAIL":
-                pygame.draw.rect(screen, "Yellow", pygame.Rect(part['position'][0], part['position'][1],16,16), 2)
+                pygame.draw.rect(screen, "Yellow", pygame.Rect(part['position'][0], part['position'][1],32,32), 2)
             
 
     def clear(self, screen):
         for part in self.body:
-            pygame.draw.rect(screen, "Black", pygame.Rect(part['position'][0], part['position'][1],16,16), 2)
+            pygame.draw.rect(screen, "Black", pygame.Rect(part['position'][0], part['position'][1],32,32), 2)
 
 
     def move(self, direction):
@@ -55,14 +55,14 @@ class Snake:
     def generate_default_movement(self, direction):
         if self.body[-1]['position'][1] == self.body[-2]['position'][1]:
             if self.body[-1]['position'][0] < self.body[-2]['position'][0]:
-                direction[0] = -16
+                direction[0] = -32
             else:
-               direction[0] = 16
+               direction[0] = 32
         else:
             if self.body[-1]['position'][1] < self.body[-2]['position'][1]:
-                direction[1] = -16
+                direction[1] = -32
             else:
-                direction[1] = 16
+                direction[1] = 32
         return direction
 
 
@@ -73,11 +73,7 @@ class Snake:
                 'type': "TAIL", 
                 'position': [0,0]
             })
-        # print("ADDING*--")
-        # for part in self.body:
-        #     print( part['type'], "  ", part['position'])
-        # print("------------------")
-            
+
 
     def check_border(self, direction):
         if self.body[-1]['position'][0] + direction[0] > self.border[0] or self.body[-1]['position'][0] + direction[0] < 0:

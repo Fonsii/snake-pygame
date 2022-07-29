@@ -8,14 +8,14 @@ class Fruit:
 
 
     def generate_position(self):
-        self.position = [randint(0, 33) * 16, randint(0, 33) * 16]
+        self.position = [randint(0, 16) * 32, randint(0, 16) * 32]
 
 
     def draw(self, screen):
-        pygame.draw.rect(screen, "Green", pygame.Rect(self.position[0], self.position[1],16,16), 2)
+        pygame.draw.rect(screen, "Green", pygame.Rect(self.position[0], self.position[1],32,32), 2)
 
     
     def clear(self, screen): 
-        pygame.draw.rect(screen, "Black", pygame.Rect(self.position[0], self.position[1],16,16), 2)
+        pygame.draw.rect(screen, "Black", pygame.Rect(self.position[0], self.position[1],32,32), 2)
 
     

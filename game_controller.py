@@ -11,7 +11,6 @@ class GameController:
         self.height = height
         
         
-
     def start(self):
         pygame.init()
         self.screen = pygame.display.set_mode((self.width,self.height))
@@ -56,13 +55,13 @@ class GameController:
                         pygame.quit()
                         exit()
                     elif event.key == 119: # W key
-                        movement[1] = -16
+                        movement[1] = -32
                     elif event.key == 115: # S key
-                        movement[1] = 16
+                        movement[1] = 32
                     elif event.key == 97: # A key
-                        movement[0] = -16
+                        movement[0] = -32
                     elif event.key == 100: # D key
-                        movement[0] = 16
+                        movement[0] = 32
         return movement
 
 
@@ -74,6 +73,3 @@ class GameController:
 
     def eat_fruit(self):
         pass
-        
-                    
-

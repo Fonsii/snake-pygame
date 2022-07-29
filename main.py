@@ -1,7 +1,7 @@
 from game_controller import GameController
 
-WIDTH = 528
-HEIGHT = 528
+WIDTH = 512
+HEIGHT = 512
 
 def main():
     controller = GameController(WIDTH, HEIGHT)  
