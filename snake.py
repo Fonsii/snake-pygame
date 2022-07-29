@@ -4,6 +4,7 @@ class Snake:
     def __init__(self, width, height):
         self.length = 2
         self.border = [width, height]
+        self.last_position_tail = [[16,32]]
         self.body = [
                         {
                             'type': "TAIL", 
@@ -21,7 +22,7 @@ class Snake:
             if part['type'] == "HEAD":
                 pygame.draw.rect(screen, "Red", pygame.Rect(part['position'][0], part['position'][1],16,16), 2) # x, y, width, heithg
             elif part['type'] == "BODY":
-                pygame.draw.rect(screen, "Green", pygame.Rect(part['position'][0], part['position'][1],16,16), 2)
+                pygame.draw.rect(screen, "Orange", pygame.Rect(part['position'][0], part['position'][1],16,16), 2)
             elif part['type'] == "TAIL":
                 pygame.draw.rect(screen, "Yellow", pygame.Rect(part['position'][0], part['position'][1],16,16), 2)
             
@@ -36,26 +37,21 @@ class Snake:
             direction = self.generate_default_movement(direction) 
 
         if self.check_border(direction):
-            for part in self.body:
-                index = self.body.index(part)
+            for part in enumerate(self.body):
                 try: 
-                    part['position'][0] = self.body[index + 1]['position'][0]
-                    part['position'][1] = self.body[index + 1]['position'][1]
-                except IndexError:          
-                        part['position'][0] += direction[0]
-                        part['position'][1] += direction[1]
+                    if part[1]['type'] == 'TAIL' and len(self.last_position_tail) >= 2:
+                        self.last_position_tail.pop()                        
+                    self.last_position_tail.append(part[1]['position'])
+                    
+                    part[1]['position'][0] = self.body[part[0] + 1]['position'][0]
+                    part[1]['position'][1] = self.body[part[0] + 1]['position'][1]
+                except IndexError:       
+                    part[1]['position'][0] += direction[0]
+                    part[1]['position'][1] += direction[1]
             return True
         return False
 
 
-    def check_border(self, direction):
-        if self.body[-1]['position'][0] + direction[0] > self.border[0] or self.body[-1]['position'][0] + direction[0] < 0:
-            return False
-        elif self.body[-1]['position'][1] + direction[1] > self.border[1] or self.body[-1]['position'][1] + direction[1] < 0:
-            return False
-        return True
-
-    
     def generate_default_movement(self, direction):
         if self.body[-1]['position'][1] == self.body[-2]['position'][1]:
             if self.body[-1]['position'][0] < self.body[-2]['position'][0]:
@@ -68,3 +64,31 @@ class Snake:
             else:
                 direction[1] = 16
         return direction
+
+
+    def add_part_snake(self):
+        self.body[0]['type'] = "BODY"
+        self.body.insert(0,
+            {
+                'type': "TAIL", 
+                'position': [0,0]
+            })
+        # print("ADDING*--")
+        # for part in self.body:
+        #     print( part['type'], "  ", part['position'])
+        # print("------------------")
+            
+
+    def check_border(self, direction):
+        if self.body[-1]['position'][0] + direction[0] > self.border[0] or self.body[-1]['position'][0] + direction[0] < 0:
+            return False
+        elif self.body[-1]['position'][1] + direction[1] > self.border[1] or self.body[-1]['position'][1] + direction[1] < 0:
+            return False
+        return True
+
+
+    def check_collision_fruit(self, fruit):
+        if fruit.position[0] == self.body[-1]['position'][0] and fruit.position[1] == self.body[-1]['position'][1]:
+            self.add_part_snake()
+            return True
+        return False
