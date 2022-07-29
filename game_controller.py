@@ -9,6 +9,7 @@ class GameController:
     def __init__(self, width, height):
         self.width = width
         self.height = height
+
         
         
     def start(self):
@@ -16,6 +17,10 @@ class GameController:
         self.screen = pygame.display.set_mode((self.width,self.height))
         pygame.display.set_caption('Snake Game')
         self.clock = pygame.time.Clock()
+        
+        self.surface_tile_light = pygame.image.load('resources/tiles/layer_world_1.png').convert()
+        self.surface_tile_dark = pygame.image.load('resources/tiles/layer_world_2.png').convert()
+
         self.snake = Snake(self.width, self.height)
         self.fruit = Fruit()
 
@@ -23,10 +28,10 @@ class GameController:
 
     
     def game(self):
-        self.snake.draw(self.screen)
-        self.generate_fruit()
+        #self.generate_tiles_map()
         self.clock.tick(60)
-
+        self.generate_fruit()
+        self.snake.draw(self.screen)
         while True:
             movement = self.handler_event()
 
@@ -44,6 +49,12 @@ class GameController:
             time.sleep(0.5)
 
     
+    def generate_tiles_map(self):
+        for x_axis in range(0,16):
+            for y_axis in range(0,16):
+                self.screen.blit(self.surface_tile_light, [x_axis*32, y_axis*32])
+
+
     def handler_event(self):
         movement = [0,0]
         for event in pygame.event.get():
