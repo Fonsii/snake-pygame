@@ -11,15 +11,16 @@ class GameController:
         self.height = height
 
         
-        
     def start(self):
         pygame.init()
         self.screen = pygame.display.set_mode((self.width,self.height))
         pygame.display.set_caption('Snake Game')
         self.clock = pygame.time.Clock()
-        
+        self.map = []
+
         self.surface_tile_light = pygame.image.load('resources/tiles/layer_world_1.png').convert()
         self.surface_tile_dark = pygame.image.load('resources/tiles/layer_world_2.png').convert()
+        self.surface_tiles_style = [self.surface_tile_light, self.surface_tile_dark]
 
         self.snake = Snake(self.width, self.height)
         self.fruit = Fruit()
@@ -28,14 +29,15 @@ class GameController:
 
     
     def game(self):
-        #self.generate_tiles_map()
+        self.generate_tiles_map()
         self.clock.tick(60)
         self.generate_fruit()
         self.snake.draw(self.screen)
         while True:
             movement = self.handler_event()
 
-            self.snake.clear(self.screen)
+            #self.snake.clear(self.screen)
+            self.fruit.draw(self.screen)
             self.snake.move(movement)
 
             if self.snake.check_collision_fruit(self.fruit):
@@ -46,13 +48,19 @@ class GameController:
 
 
             pygame.display.flip()
+            self.generate_tiles_map()
             time.sleep(0.5)
 
     
     def generate_tiles_map(self):
-        for x_axis in range(0,16):
-            for y_axis in range(0,16):
-                self.screen.blit(self.surface_tile_light, [x_axis*32, y_axis*32])
+        for x_axis in range(0,15):
+            for y_axis in range(0,15):
+                if (x_axis + y_axis) % 2 == 0:
+                    self.screen.blit(self.surface_tile_light, [x_axis*32, y_axis*32])
+                    self.map.append(0)
+                else:
+                    self.screen.blit(self.surface_tile_dark, [x_axis*32, y_axis*32])
+                    self.map.append(1)
 
 
     def handler_event(self):
@@ -77,7 +85,7 @@ class GameController:
 
 
     def generate_fruit(self):
-        self.fruit.clear(self.screen)
+        #self.fruit.clear(self.screen, self.map, self.surface_tiles_style)
         self.fruit.generate_position()
         self.fruit.draw(self.screen)
 

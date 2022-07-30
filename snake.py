@@ -22,7 +22,7 @@ class Snake:
             if part['type'] == "HEAD":
                 pygame.draw.rect(screen, "Red", pygame.Rect(part['position'][0], part['position'][1],32,32), 2) # x, y, width, heithg
             elif part['type'] == "BODY":
-                pygame.draw.rect(screen, "Orange", pygame.Rect(part['position'][0], part['position'][1],32,32), 2)
+                pygame.draw.rect(screen, "White", pygame.Rect(part['position'][0], part['position'][1],32,32), 2)
             elif part['type'] == "TAIL":
                 pygame.draw.rect(screen, "Yellow", pygame.Rect(part['position'][0], part['position'][1],32,32), 2)
             
