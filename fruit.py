@@ -14,9 +14,3 @@ class Fruit:
 
     def draw(self, screen):
         screen.blit(self.surface, self.position)
-
-    
-    def clear(self, screen, world_game, surface_tiles_style): 
-        x_position = int(self.position[0]/32)
-        y_position = int(self.position[1]/32)
-        screen.blit(surface_tiles_style[world_game[16*x_position + y_position]], [self.position[0],self.position[1]])
