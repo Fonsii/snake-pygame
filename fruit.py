@@ -1,7 +1,6 @@
 import pygame
 from random import randint
 
-
 class Fruit:
     def __init__(self):
         self.surface = pygame.image.load('resources/fruit/apple_fruit.png').convert_alpha()
