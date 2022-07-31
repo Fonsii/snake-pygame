@@ -5,11 +5,12 @@ class Snake:
     def __init__(self, width, height):
         self.length = 2
         self.border = [width, height]
-        self.last_position_tail = [[32, 64]]
         self.body = [
                         {
                             'type': "TAIL", 
-                            'position': [32, 64]
+                            'position': [32, 64],
+                            'surface':  pygame.image.load('resources/snake_tail/snake_tail.png').convert_alpha(),
+                            'default_surface': pygame.image.load('resources/snake_tail/snake_tail.png').convert_alpha()
                         }, 
                         {
                             'type': "HEAD", 
@@ -34,12 +35,11 @@ class Snake:
     def draw(self, screen):
         for part in self.body:
             if part['type'] == "HEAD":
-                #part['surface'] = pygame.transform.rotate(part['surface'], 90)
                 screen.blit(part['surface'], part['position'])
             elif part['type'] == "BODY":
-                pygame.draw.rect(screen, "White", pygame.Rect(part['position'][0], part['position'][1],32,32), 2)
+                screen.blit(part['surface'], part['position'])
             elif part['type'] == "TAIL":
-                pygame.draw.rect(screen, "Yellow", pygame.Rect(part['position'][0], part['position'][1],32,32), 2)
+                screen.blit(part['surface'], part['position'])
 
     
     def update(self):
@@ -59,19 +59,25 @@ class Snake:
         if self.check_border(direction):
             for part in enumerate(self.body):
                 try: 
-                    if part[1]['type'] == 'TAIL' and len(self.last_position_tail) >= 2:
-                        self.last_position_tail.pop()                        
-                    self.last_position_tail.append(part[1]['position'])
-                    
                     part[1]['position'][0] = self.body[part[0] + 1]['position'][0]
                     part[1]['position'][1] = self.body[part[0] + 1]['position'][1]
                 except IndexError:   
                     part[1]['position'][0] += direction[0]
                     part[1]['position'][1] += direction[1]
                     self.update()
-                    self.change_direction_head()
+                    self.change_directions()
             return True
         return False
+
+
+    def change_directions(self):
+        for part in enumerate(self.body):
+            if part[1]['type'] == "HEAD":
+                self.change_direction_head()
+            elif part[1]['type'] == "TAIl":
+                self.change_direction_tail()
+            else:
+                self.change_direction_body(part[0], part[1])
 
 
     def change_direction_head(self):
@@ -85,6 +91,31 @@ class Snake:
         angle = degrees(radians)
 
         head['surface'] =  pygame.transform.rotate(head['surface'], angle+180)
+
+
+    def change_direction_tail(self):
+        tail =  self.body[0]
+        element_ahead_tail = self.body[1]
+
+        change_x = tail['position'][0] - element_ahead_tail['position'][0]
+        change_y = tail['position'][1] - element_ahead_tail['position'][1]
+
+        radians = atan2(-change_y,change_x)
+        angle = degrees(radians)
+
+        tail['surface'] = pygame.transform.rotate(tail['default_surface'], angle+180)
+
+
+    def change_direction_body(self, body_index, body_part):
+        element_ahead_tail = self.body[body_index + 1]
+
+        change_x = body_part['position'][0] - element_ahead_tail['position'][0]
+        change_y = body_part['position'][1] - element_ahead_tail['position'][1]
+
+        radians = atan2(-change_y,change_x)
+        angle = degrees(radians)
+
+        body_part['surface'] = pygame.transform.rotate(body_part['default_surface'], angle+180)
 
 
     def generate_default_movement(self, direction):
@@ -102,12 +133,15 @@ class Snake:
 
 
     def add_part_snake(self):
-        self.body[0]['type'] = "BODY"
-        self.body.insert(0,
-            {
-                'type': "TAIL", 
-                'position': [0,0]
-            })
+        new_part = {
+            'type': "BODY",
+            'position': self.body[0]['position'],
+            'surface': pygame.image.load('resources/snake_body/snake_body.png').convert_alpha(),
+            'default_surface': pygame.image.load('resources/snake_body/snake_body.png').convert_alpha(),
+        }
+
+        self.body.insert(1, new_part)
+        self.body[0]['position'] = [0,0]
 
 
     def check_border(self, direction):
