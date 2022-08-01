@@ -26,4 +26,8 @@ Correr el código y divertirse!
 
     py main.py
 
+O
+
+    python main.py
+
 **Este proyecto esta en Inglés**
