@@ -166,9 +166,9 @@ class Snake:
 
     def check_collision_border(self, direction):
         head = self.body[-1]
-        if head['position'][0] + direction[0] > self.border[0] - 32 or head['position'][0] + direction[0] < 0:
+        if head['position'][0] + direction[0] > self.border[0] - 64 or head['position'][0] + direction[0] < 32:
             return False
-        elif head['position'][1] + direction[1] > self.border[1] - 32  or head['position'][1] + direction[1] < 0:
+        elif head['position'][1] + direction[1] > self.border[1] - 64  or head['position'][1] + direction[1] < 32:
             return False
         return True
 
@@ -176,6 +176,7 @@ class Snake:
         head = self.body[-1]
         for part in self.body[:-1]:
             if head['position'][0] + direction[0] == part['position'][0] and head['position'][1] + direction[1] == part['position'][1]:
+                self.change_direction_head()
                 return False
         return True
 
