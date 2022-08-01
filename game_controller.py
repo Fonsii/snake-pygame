@@ -16,10 +16,11 @@ class GameController:
         self.screen = pygame.display.set_mode((self.width,self.height))
         pygame.display.set_caption('Snake Game')
         self.clock = pygame.time.Clock()
-        
+        self.losing = False
+        self.can_move_snake = True
+
         self.surface_tile_light = pygame.image.load('resources/tiles/layer_world_1.png').convert()
         self.surface_tile_dark = pygame.image.load('resources/tiles/layer_world_2.png').convert()
-        self.surface_tiles_style = [self.surface_tile_light, self.surface_tile_dark]
 
         self.snake = Snake(self.width, self.height)
         self.fruit = Fruit()
@@ -27,26 +28,39 @@ class GameController:
         self.game()
 
     
+    def restart_game(self):
+        self.losing = False
+
+        self.snake = Snake(self.width, self.height)
+        self.fruit = Fruit()
+
+        self.game()
+
+
     def game(self):
         self.generate_tiles_map()
         self.clock.tick(60)
         self.generate_fruit()
         self.snake.draw(self.screen)
         while True:
-            movement = self.handler_event()
-
-            self.fruit.draw(self.screen)
-            if not self.snake.move(movement):
-                print("Lose")
+            if self.losing:
+                self.handler_event()
             else:
-                if self.snake.check_collision_fruit(self.fruit):
-                    self.eat_fruit()
+                movement = self.handler_event()
+                self.fruit.draw(self.screen)
 
-                self.snake.draw(self.screen)
-            
-                pygame.display.flip()
-                self.generate_tiles_map()
-                time.sleep(0.5)
+                if not self.snake.move(movement):
+                    self.losing = True
+                else:
+                    if self.snake.check_collision_fruit(self.fruit):
+                        self.eat_fruit()
+
+                    self.snake.draw(self.screen)
+                
+                    pygame.display.flip()
+                    self.generate_tiles_map()
+                    time.sleep(0.5)
+                    self.can_move_snake = True
 
     
     def generate_tiles_map(self):
@@ -68,14 +82,21 @@ class GameController:
                     if event.key == 27:
                         pygame.quit()
                         exit()
-                    elif event.key == 119: # W key
-                        movement[1] = -32
-                    elif event.key == 115: # S key
-                        movement[1] = 32
-                    elif event.key == 97: # A key
-                        movement[0] = -32
-                    elif event.key == 100: # D key
-                        movement[0] = 32
+                    elif self.can_move_snake:
+                        if event.key == 119: # W key
+                            movement[1] = -32
+                            self.can_move_snake = False
+                        elif event.key == 115: # S key
+                            movement[1] = 32
+                            self.can_move_snake = False
+                        elif event.key == 97: # A key
+                            movement[0] = -32
+                            self.can_move_snake = False
+                        elif event.key == 100: # D key
+                            movement[0] = 32
+                            self.can_move_snake = False
+                    elif event.key == 114 and self.losing: # R key
+                        self.restart_game()
         return movement
 
 
