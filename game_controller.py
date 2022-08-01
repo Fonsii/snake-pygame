@@ -119,7 +119,6 @@ class GameController:
         self.snake.set_animation_food()
         self.snake.add_score()
         self.refresh_score()
-        self.snake.move([0,0])
 
 
     def start_text_top_score(self):

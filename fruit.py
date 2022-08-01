@@ -7,6 +7,7 @@ class Fruit:
         self.rect = self.surface.get_rect()
         self.position = self.rect.move([0,0])
 
+
     def generate_position(self):
         self.position = [randint(1, 14) * 32, randint(1, 14) * 32]
 

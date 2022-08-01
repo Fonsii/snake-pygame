@@ -1,2 +1,4 @@
-# snake-pygame
-Snake game build in pygame
+# PyGame_Snake
+
+This is a simple snake game build in pygame
+
