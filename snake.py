@@ -5,6 +5,21 @@ class Snake:
     def __init__(self, width, height):
         self.length = 2
         self.border = [width, height]
+        self.default_animation_head_snake = [
+            pygame.image.load('resources/snake_head/snake1.png').convert_alpha(),
+            pygame.image.load('resources/snake_head/snake2.png').convert_alpha(),
+            pygame.image.load('resources/snake_head/snake3.png').convert_alpha(),
+            pygame.image.load('resources/snake_head/snake4.png').convert_alpha(),
+            pygame.image.load('resources/snake_head/snake5.png').convert_alpha(),
+            pygame.image.load('resources/snake_head/snake6.png').convert_alpha()
+        ]
+        self.eating_animation_head_snake = [
+            pygame.image.load('resources/snake_head_fruit/snake_food1.png').convert_alpha(),
+            pygame.image.load('resources/snake_head_fruit/snake_food2.png').convert_alpha(),
+            pygame.image.load('resources/snake_head_fruit/snake_food3.png').convert_alpha(),
+            pygame.image.load('resources/snake_head_fruit/snake_food4.png').convert_alpha()
+        ]
+
         self.body = [
                         {
                             'type': "TAIL", 
@@ -15,16 +30,10 @@ class Snake:
                         {
                             'type': "HEAD", 
                             'position': [64, 64],                      
-                            'sprites_list':[
-                                pygame.image.load('resources/snake_head/snake1.png').convert_alpha(),
-                                pygame.image.load('resources/snake_head/snake2.png').convert_alpha(),
-                                pygame.image.load('resources/snake_head/snake3.png').convert_alpha(),
-                                pygame.image.load('resources/snake_head/snake4.png').convert_alpha(),
-                                pygame.image.load('resources/snake_head/snake5.png').convert_alpha(),
-                                pygame.image.load('resources/snake_head/snake6.png').convert_alpha()
-                            ],
+                            'sprites_list': self.default_animation_head_snake,
                             'current_sprite': 0,
-                            'surface': 0
+                            'surface': 0,
+                            'eating' : False
                         }
                     ]
 
@@ -34,17 +43,14 @@ class Snake:
 
     def draw(self, screen):
         for part in self.body:
-            if part['type'] == "HEAD":
-                screen.blit(part['surface'], part['position'])
-            elif part['type'] == "BODY":
-                screen.blit(part['surface'], part['position'])
-            elif part['type'] == "TAIL":
-                screen.blit(part['surface'], part['position'])
+            screen.blit(part['surface'], part['position'])
 
     
     def update(self):
         head = self.body[-1]
         if head['current_sprite'] + 1 >= len(head['sprites_list']):
+            if head['eating']:
+                self.set_animation_default()
             head['current_sprite'] = 0
         else:
             head['current_sprite'] += 1
@@ -142,6 +148,19 @@ class Snake:
 
         self.body.insert(1, new_part)
         self.body[0]['position'] = [0,0]
+
+    
+    def set_animation_food(self):
+        head = self.body[-1]
+        head['sprites_list'] = self.eating_animation_head_snake
+        head['current_sprite'] = 0
+        head['eating'] = True
+
+
+    def set_animation_default(self):
+        head = self.body[-1]
+        head['sprites_list'] = self.default_animation_head_snake
+        head['eating'] = False
 
 
     def check_border(self, direction):

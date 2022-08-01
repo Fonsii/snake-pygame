@@ -35,17 +35,14 @@ class GameController:
         while True:
             movement = self.handler_event()
 
-            #self.snake.clear(self.screen)
             self.fruit.draw(self.screen)
             self.snake.move(movement)
 
             if self.snake.check_collision_fruit(self.fruit):
-                self.generate_tiles_map()
-                self.generate_fruit()
-                self.snake.move([0,0])
+                self.eat_fruit()
 
             self.snake.draw(self.screen)
-
+        
             pygame.display.flip()
             self.generate_tiles_map()
             time.sleep(0.5)
@@ -87,4 +84,7 @@ class GameController:
 
 
     def eat_fruit(self):
-        pass
+        self.generate_tiles_map()
+        self.generate_fruit()
+        self.snake.set_animation_food()
+        self.snake.move([0,0])
