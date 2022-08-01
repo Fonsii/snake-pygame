@@ -6,7 +6,9 @@
 
 Simple juego de snake en pygame
 
-![Gameplay](https://github.com/Fonsii/snake-pygame/blob/main/resources/readme_utils/snake_gameplay.png)
+<p align="center" width="100%">
+    <img width="33%" src="https://github.com/Fonsii/snake-pygame/blob/main/resources/readme_utils/snake_gameplay.png"> 
+</p>
 
 Clonar el repositorio
 
