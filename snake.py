@@ -5,6 +5,7 @@ class Snake:
     def __init__(self, width, height):
         self.length = 2
         self.border = [width, height]
+        self.score = 0
         self.default_animation_head_snake = [
             pygame.image.load('resources/snake_head/snake1.png').convert_alpha(),
             pygame.image.load('resources/snake_head/snake2.png').convert_alpha(),
@@ -59,10 +60,10 @@ class Snake:
 
 
     def move(self, direction):
-        if direction == [0,0]:
+        if direction == [0,0] or self.check_movement_behind(direction):
             direction = self.generate_default_movement(direction) 
 
-        if self.check_border(direction):
+        if self.check_collision_border(direction) and self.check_collision_body_parts(direction):
             for part in enumerate(self.body):
                 try: 
                     part[1]['position'][0] = self.body[part[0] + 1]['position'][0]
@@ -163,12 +164,28 @@ class Snake:
         head['eating'] = False
 
 
-    def check_border(self, direction):
-        if self.body[-1]['position'][0] + direction[0] > self.border[0] or self.body[-1]['position'][0] + direction[0] < 0:
+    def check_collision_border(self, direction):
+        head = self.body[-1]
+        if head['position'][0] + direction[0] > self.border[0] - 32 or head['position'][0] + direction[0] < 0:
             return False
-        elif self.body[-1]['position'][1] + direction[1] > self.border[1] or self.body[-1]['position'][1] + direction[1] < 0:
+        elif head['position'][1] + direction[1] > self.border[1] - 32  or head['position'][1] + direction[1] < 0:
             return False
         return True
+
+    def check_collision_body_parts(self, direction):
+        head = self.body[-1]
+        for part in self.body[:-1]:
+            if head['position'][0] + direction[0] == part['position'][0] and head['position'][1] + direction[1] == part['position'][1]:
+                return False
+        return True
+
+
+    def check_movement_behind(self, direction):
+        head = self.body[-1]
+        element_behind_head = self.body[-2]
+        if head['position'][0] + direction[0] == element_behind_head['position'][0] and head['position'][1] + direction[1] == element_behind_head['position'][1]:
+            return True
+        return False
 
 
     def check_collision_fruit(self, fruit):
@@ -176,3 +193,7 @@ class Snake:
             self.add_part_snake()
             return True
         return False
+
+    
+    def add_score(self):
+        self.score += 1
