@@ -26,5 +26,9 @@ Now, install pygame
 Run the code and have fun!
 
     py main.py
+    
+Or
+
+    python main.py
 
 **This project uses English**
