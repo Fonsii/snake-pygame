@@ -1,4 +1,9 @@
 # PyGame_Snake
+<p align="center">
+  <span>English</span> |
+  <a href="https://github.com/Fonsii/snake-pygame/blob/main/lang/spanish/README.md">Español</a>
+</p>
+
 
 This is a simple snake game build in pygame
 
@@ -20,4 +25,4 @@ Run the code and have fun!
 
     py main.py
 
-**This project uses English for variables and functions**
+**This project uses English**
