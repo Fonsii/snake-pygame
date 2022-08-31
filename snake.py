@@ -114,10 +114,10 @@ class Snake:
 
 
     def change_direction_body(self, body_index, body_part):
-        element_ahead_tail = self.body[body_index + 1]
+        element_ahead = self.body[body_index + 1]
 
-        change_x = body_part['position'][0] - element_ahead_tail['position'][0]
-        change_y = body_part['position'][1] - element_ahead_tail['position'][1]
+        change_x = body_part['position'][0] - element_ahead['position'][0]
+        change_y = body_part['position'][1] - element_ahead['position'][1]
 
         radians = atan2(-change_y,change_x)
         angle = degrees(radians)
@@ -126,13 +126,15 @@ class Snake:
 
 
     def generate_default_movement(self, direction):
-        if self.body[-1]['position'][1] == self.body[-2]['position'][1]:
-            if self.body[-1]['position'][0] < self.body[-2]['position'][0]:
+        head = self.body[-1]
+        element_behind_head = self.body[-2]
+        if head['position'][1] == element_behind_head['position'][1]:
+            if head['position'][0] < element_behind_head['position'][0]:
                 direction[0] = -32
             else:
                direction[0] = 32
         else:
-            if self.body[-1]['position'][1] < self.body[-2]['position'][1]:
+            if head['position'][1] < element_behind_head['position'][1]:
                 direction[1] = -32
             else:
                 direction[1] = 32
@@ -172,6 +174,7 @@ class Snake:
             return False
         return True
 
+
     def check_collision_body_parts(self, direction):
         head = self.body[-1]
         for part in self.body[:-1]:
@@ -190,7 +193,8 @@ class Snake:
 
 
     def check_collision_fruit(self, fruit):
-        if fruit.position[0] == self.body[-1]['position'][0] and fruit.position[1] == self.body[-1]['position'][1]:
+        head = self.body[-1]
+        if fruit.position[0] == head['position'][0] and fruit.position[1] == head['position'][1]:
             self.add_part_snake()
             return True
         return False

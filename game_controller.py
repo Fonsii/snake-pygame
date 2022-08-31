@@ -62,7 +62,7 @@ class GameController:
                 else:
                     if self.snake.check_collision_fruit(self.fruit):
                         self.eat_fruit()
-                    pygame.draw.rect(self.screen, (87,138,52), pygame.Rect(0, 0, 32, 32))
+                pygame.draw.rect(self.screen, (87,138,52), pygame.Rect(0, 0, 32, 32))
                 self.snake.draw(self.screen)
                 
                 pygame.display.flip()
